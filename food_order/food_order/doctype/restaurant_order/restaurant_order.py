@@ -7,4 +7,9 @@ import frappe
 from frappe.model.document import Document
 
 class RestaurantOrder(Document):
-	pass
+	def validate(self):
+		total = 0
+		for item in self.ro_items:
+			total = total + (item.oi_quantity * float(item.oi_price))
+		self.ro_total = total
+		frappe.logger(__name__).debug('Total is {0}'.format(total))
